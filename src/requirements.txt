@@ -1,0 +1,6 @@
+requests
+xlsxwriter
+pandas
+numpy
+slacker
+boto3
