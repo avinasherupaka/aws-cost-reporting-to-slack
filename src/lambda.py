@@ -107,10 +107,11 @@ class CostExplorer:
             with open(file, 'rb') as fin:
                 # contents = fin.read()
                 res = self.slack.files.upload(fin, filetype=ftype, filename=basename,  channels=['obp-product-it', 'obp-pd', 'obp-fs-devs'], title='OBP AWS Cost Report', initial_comment=message)
-                response = res.json()
-                # print(response)
+                if res["ok"]:
+                    print("File upload succeeded")
             if not res["ok"]:
-                self.notify("File upload failed: %s.".format(res["error"]))
+                print("Post failed: %s" % res["error"])
+                self.notify("File upload failed: %s.".format(res["error"]))  
         else:
             self.notify('{basename} not found. Uploading failed.')
 
