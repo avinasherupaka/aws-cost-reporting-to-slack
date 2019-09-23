@@ -2,3 +2,6 @@ fileignoreconfig:
 - filename: deploy.sam.yaml
   checksum: b387cabba10c496f851f10483b1b384d95f9e270b63ce8534a203b4683c117ab
   ignore_detectors: []
+- filename: deploy.sam.yaml
+  checksum: 04a1e284810aef2166510308c78d6868d38fab1bd989f61c7538ffc5b8b102b0
+  ignore_detectors: []  

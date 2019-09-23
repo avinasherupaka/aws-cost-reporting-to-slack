@@ -99,14 +99,17 @@ class CostExplorer:
     def upload_to_slack(self, file, ftype="auto"):
         basename = os.path.basename(file)
         print("environ Account ID on Function main " + os.environ['CURRENT_ACCOUNT_ID'])
+        today = datetime.date.today()
         if os.environ['CURRENT_ACCOUNT_ID'] == '712098116579':
             message = 'AWS Billing & Cost Management Summary Report For OBP Prod Account(712098116579)'
+            file_title = f'OBP AWS Cost Report Prod-{today}'
         elif os.environ['CURRENT_ACCOUNT_ID'] == '488499787904':
             message = 'AWS Billing & Cost Management Summary Report For OBP Non-Prod Account(488499787904)'
+            file_title = f'OBP AWS Cost Report Prod-{today}'
         if os.path.isfile(file):
             with open(file, 'rb') as fin:
                 # contents = fin.read()
-                res = self.slack.files.upload(fin, filetype=ftype, filename=basename,  channels=['obp-product-it', 'obp-pd', 'obp-fs-devs'], title='OBP AWS Cost Report', initial_comment=message)
+                res = self.slack.files.upload(fin, filetype=ftype, filename=basename,  channels=['obp-product-it', 'obp-pd', 'obp-fs-devs'], title=file_title, initial_comment=message)
                 if res["ok"]:
                     print("File upload succeeded")
             if not res["ok"]:
@@ -374,7 +377,12 @@ class CostExplorer:
     def generateExcel(self):
         # Create a Pandas Excel writer using XlsxWriter as the engine.\
         os.chdir('/tmp')
-        writer = pd.ExcelWriter('cost_explorer_report.xlsx', engine='xlsxwriter')
+        today = datetime.date.today()
+        if os.environ['CURRENT_ACCOUNT_ID'] == '712098116579':
+            file_name = f'obp_cost_explorer_report_prod_{today}.xlsx'
+        elif os.environ['CURRENT_ACCOUNT_ID'] == '488499787904':
+            file_name = f'obp_cost_explorer_report_prod_{today}.xlsx'
+        writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
         workbook = writer.book
         for report in self.reports:
             print(report['Name'],report['Type'])
@@ -397,7 +405,7 @@ class CostExplorer:
                 chart.set_x_axis({'label_position': 'low'})
                 worksheet.insert_chart('O2', chart, {'x_scale': 2.0, 'y_scale': 2.0})
         writer.save()
-        self.upload_to_slack("/tmp/cost_explorer_report.xlsx", "xlsx") 
+        self.upload_to_slack(f"/tmp/{file_name}", "xlsx") 
 
 def main_handler(event=None, context=None): 
     costexplorer = CostExplorer(CurrentMonth=False)
