@@ -105,7 +105,7 @@ class CostExplorer:
             file_title = f'OBP AWS Cost Report Prod-{today}'
         elif os.environ['CURRENT_ACCOUNT_ID'] == '488499787904':
             message = 'AWS Billing & Cost Management Summary Report For OBP Non-Prod Account(488499787904)'
-            file_title = f'OBP AWS Cost Report Prod-{today}'
+            file_title = f'OBP AWS Cost Report Non-Prod-{today}'
         if os.path.isfile(file):
             with open(file, 'rb') as fin:
                 # contents = fin.read()
@@ -381,7 +381,8 @@ class CostExplorer:
         if os.environ['CURRENT_ACCOUNT_ID'] == '712098116579':
             file_name = f'obp_cost_explorer_report_prod_{today}.xlsx'
         elif os.environ['CURRENT_ACCOUNT_ID'] == '488499787904':
-            file_name = f'obp_cost_explorer_report_prod_{today}.xlsx'
+            file_name = f'obp_cost_explorer_report_non_prod_{today}.xlsx'
+        os.environ['SLACK_FILE_NAME'] = file_name
         writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
         workbook = writer.book
         for report in self.reports:
@@ -405,7 +406,6 @@ class CostExplorer:
                 chart.set_x_axis({'label_position': 'low'})
                 worksheet.insert_chart('O2', chart, {'x_scale': 2.0, 'y_scale': 2.0})
         writer.save()
-        self.upload_to_slack(f"/tmp/{file_name}", "xlsx") 
 
 def main_handler(event=None, context=None): 
     costexplorer = CostExplorer(CurrentMonth=False)
@@ -436,6 +436,8 @@ def main_handler(event=None, context=None):
     costexplorer.addRiReport(Name="RIUtilizationSavings", Savings=True)
     costexplorer.addRiReport(Name="RIRecommendation") #Service supported value(s): Amazon Elastic Compute Cloud - Compute, Amazon Relational Database Service
     costexplorer.generateExcel()
+    slack_file_name = os.environ['SLACK_FILE_NAME']
+    costexplorer.upload_to_slack(f"/tmp/{slack_file_name}", "xlsx")
     return "Report Generated"
 
 if __name__ == '__main__':
