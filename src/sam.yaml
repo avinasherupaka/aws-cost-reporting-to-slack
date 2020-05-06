@@ -30,7 +30,7 @@ Resources:
       Runtime: python3.6
       CodeUri: ../bin/lambda.zip
       Layers:
-        - arn:aws:lambda:us-east-1:712098116579:layer:obp-aws-cost-explorer-report:1
+        - arn:aws:lambda:us-east-1:FILL_WITH_AWS_ACCOUNT_NUMBER:layer:obp-aws-cost-explorer-report:1
       Role: !GetAtt CostExplorerReportLambdaIAMRole.Arn
       Environment:
         Variables:
@@ -88,5 +88,5 @@ Resources:
                 Service: 
                   - "lambda.amazonaws.com"
         PermissionsBoundary:
-          Fn::Sub: "arn:aws:iam::712098116579:policy/standard-permissions-boundary"  
+          Fn::Sub: "arn:aws:iam::FILL_WITH_AWS_ACCOUNT_NUMBER:policy/standard-permissions-boundary"  
   

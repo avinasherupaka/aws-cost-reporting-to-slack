@@ -6,7 +6,7 @@ export SlackNotificationToken=$1
 export AWS_DEFAULT_REGION=us-east-1 
 #Change the below, an s3 bucket to store lambda code for deploy, and output report
 #Must be in same region as lambda (ie AWS_DEFAULT_REGION)
-export BUCKET=obp-aws-cost-explorer-712098116579
+export BUCKET=obp-aws-cost-explorer-FILL_WITH_AWS_ACCOUNT_NUMBER
 
 #Comma Seperated list of Cost Allocation Tags (must be configured in AWS billing prefs)
 export COST_TAGS=mon:cost-center
