@@ -100,12 +100,8 @@ class CostExplorer:
         basename = os.path.basename(file)
         print("environ Account ID on Function main " + os.environ['CURRENT_ACCOUNT_ID'])
         today = datetime.date.today()
-        if os.environ['CURRENT_ACCOUNT_ID'] == '712098116579':
-            message = 'AWS Billing & Cost Management Summary Report For OBP Prod Account(712098116579)'
-            file_title = f'OBP AWS Cost Report Prod-{today}'
-        elif os.environ['CURRENT_ACCOUNT_ID'] == '488499787904':
-            message = 'AWS Billing & Cost Management Summary Report For OBP Non-Prod Account(488499787904)'
-            file_title = f'OBP AWS Cost Report Non-Prod-{today}'
+        message = 'AWS Billing & Cost Management Summary Report'
+        file_title = f'OBP AWS Cost Report Prod-{today}'
         if os.path.isfile(file):
             with open(file, 'rb') as fin:
                 # contents = fin.read()
@@ -378,10 +374,7 @@ class CostExplorer:
         # Create a Pandas Excel writer using XlsxWriter as the engine.\
         os.chdir('/tmp')
         today = datetime.date.today()
-        if os.environ['CURRENT_ACCOUNT_ID'] == '712098116579':
-            file_name = f'obp_cost_explorer_report_prod_{today}.xlsx'
-        elif os.environ['CURRENT_ACCOUNT_ID'] == '488499787904':
-            file_name = f'obp_cost_explorer_report_non_prod_{today}.xlsx'
+        file_name = f'obp_cost_explorer_report_prod_{today}.xlsx'
         os.environ['SLACK_FILE_NAME'] = file_name
         writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
         workbook = writer.book
